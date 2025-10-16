@@ -10,16 +10,8 @@ Others may see it as a job, a means to an end, but for me, coding in Zig is a sa
 
 The source code of this website and everything [can be found here](https://github.com/ZigStuff/zigstuff.github.io).
 
-## Legal Stuff / License
+## Legal Stuff / License Info
 
-### All Code Examples on Zig Stuff
-
-All code examples on Zig Stuff by William Welna is marked with CC0 1.0 Universal. To view a copy of this license, visit [http://creativecommons.org/publicdomain/zero/1.0](http://creativecommons.org/publicdomain/zero/1.0)
-
-### All Blog Posts on Zig Stuff
-
-All blog posts on Zig Stuff by William Welna is licensed under CC BY 4.0. To view a copy of this license, visit [http://creativecommons.org/licenses/by/4.0/](http://creativecommons.org/licenses/by/4.0/)
-
-### Static HTML Template Generator
-
-All of the static template generation source used by Zig Stuff by William Welna is marked with CC0 1.0 Universal. To view a copy of this license, visit [http://creativecommons.org/publicdomain/zero/1.0](http://creativecommons.org/publicdomain/zero/1.0)
+* All code examples on Zig Stuff by William Welna is marked with CC0 1.0 Universal. To view a copy of this license, visit [http://creativecommons.org/publicdomain/zero/1.0](http://creativecommons.org/publicdomain/zero/1.0)
+* All blog posts on Zig Stuff by William Welna is licensed under CC BY 4.0. To view a copy of this license, visit [http://creativecommons.org/licenses/by/4.0/](http://creativecommons.org/licenses/by/4.0/)
+* All of the static template generation source used by Zig Stuff by William Welna is marked with CC0 1.0 Universal. To view a copy of this license, visit [http://creativecommons.org/publicdomain/zero/1.0](http://creativecommons.org/publicdomain/zero/1.0)
