@@ -6,7 +6,7 @@ import configparser
 import os
 from markdown2 import Markdown
 
-markdown = Markdown()
+markdown = Markdown(extras=['fenced-code-blocks'])
 
 class Page:
     def __init__(self, config, afile):

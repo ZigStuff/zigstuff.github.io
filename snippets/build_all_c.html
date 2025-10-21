@@ -1,0 +1,114 @@
+<html>
+<head>
+<title>Zig Stuff Online</title>
+<meta name="author" content="%AUTHOR">
+<meta name="keywords" content="ZIG, Programming, Blog">
+<meta name="description" content="A Blog on Programming in ZIG">
+<meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/zig.min.js"></script>
+<script>hljs.highlightAll();</script>
+<style>
+    body {
+        background-color: #222831;
+        color: #DFD0B8;
+        a:link {color:#948979;}
+        a:visited {color:#948979;}
+        a:hover {color:#948979;}
+        a:active {color:#948979;}
+    }
+    h3, h2, h1 {
+        font-weight: 800;
+    }
+    h1 {
+        text-decoration: underline;
+        text-align: center;
+        font-size: 2.5rem;
+        padding-bottom: 3rem;
+    }
+    h2 {
+        text-decoration: underline;
+        font-size: 2rem;
+    }
+    h3 {
+        text-decoration: underline;
+        font-size: 1.5rem;
+    }
+    h4 {
+        text-decoration: underline;
+        font-size: 1rem;
+    }
+    pre {
+        padding-top:1rem;
+        padding-bottom: 1rem;
+    }
+</style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row h-100">
+            <div class="col-2" id="sidebar" style="background-color: #393E46;padding-top: 1%; border-right: 1px solid #948979;">
+                <p style="text-align: center;"><a href="/" ><img class="rounded-circle" src="/images/angryface.jpg" width="150" height="150"></a><h2>Zig Stuff Online</h2><hr></p>
+                <nav class="class=flex-column flex-grow-1 w-100 ps-0" style="font-weight: 800;">
+                    <a class="nav-link active" aria-current="page" href="/"><i class="bi bi-house-heart-fill" style="padding-right:2%;"></i> Home</a>
+                    <a class="nav-link" href="/blog/"><i class="bi bi-cup-hot-fill" style="padding-right:2%;"></i> Blog</a>
+                    <a class="nav-link" href="/snippets/"><i class="bi bi-clipboard-heart-fill" style="padding-right:2%;"></i> Code Snippets</a>
+                    <a class="nav-link" href="/resources.html"><i class="bi bi-box2-heart-fill" style="padding-right:2%;"></i> Resources</a>
+                    <a class="nav-link" href="/about.html"><i class="bi bi-info-circle-fill" style="padding-right:2%;"></i> About</a>
+                </nav>
+            </div>
+            <div class="col-10" style="padding-top: 2%;">
+                <div class="container-fluid h-100" style="width:75%">
+                    <!-- %BODY_HEADER% -->
+                    <div class="row">
+<h1>Adding C into your build.zig</h1>
+
+<p>So, a while back I wanted to see how easy it was to directly integrate Lua into Zig, but not just as a shared and/or static library, but my own modified version of Lua. This would work well with any kind of C without having to constantly modify build.zig every time you added a new C source file. This is for Zig 15.1, earlier versions are a little bit different, as is the ever changing ways.</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">cflags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">_</span><span class="p">][]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s">&quot;-std=c99&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;-Wall&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;-Wextra&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;-DLUA_COMPAT_5_3&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="k">switch</span><span class="p">(</span><span class="n">builtin</span><span class="p">.</span><span class="n">target</span><span class="p">.</span><span class="n">os</span><span class="p">.</span><span class="n">tag</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="p">.</span><span class="n">linux</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&quot;-DLUA_USE_LINUX&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="p">.</span><span class="n">macos</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&quot;-DLUA_USE_MACOSX&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="p">.</span><span class="n">windows</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&quot;-DLUA_USE_POSIX&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&quot;-DLUA_USE_POSIX&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="c1">// Add any C Sources in src</span>
+
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">cSources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">ArrayList</span><span class="p">([]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="p">).</span><span class="n">init</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">allocator</span><span class="p">);</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">srcDir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fs</span><span class="p">.</span><span class="n">cwd</span><span class="p">().</span><span class="n">openDir</span><span class="p">(</span><span class="s">&quot;src&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{.</span><span class="n">iterate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">access_sub_paths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">,});</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">srcDir</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">walker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">srcDir</span><span class="p">.</span><span class="n">walk</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">allocator</span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">walker</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="k">try</span><span class="w"> </span><span class="n">walker</span><span class="p">.</span><span class="n">next</span><span class="p">())</span><span class="w"> </span><span class="o">|</span><span class="n">file</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">std</span><span class="p">.</span><span class="n">mem</span><span class="p">.</span><span class="n">eql</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fs</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">extension</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">basename</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;.c&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="n">cSources</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">pathJoin</span><span class="p">(</span><span class="o">&amp;</span><span class="p">.{</span><span class="s">&quot;src&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="n">path</span><span class="p">}));</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">exe</span><span class="p">.</span><span class="n">addCSourceFiles</span><span class="p">(.{.</span><span class="n">files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cSources</span><span class="p">.</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cflags</span><span class="p">,});</span>
+
+<span class="w">    </span><span class="n">exe</span><span class="p">.</span><span class="n">addIncludePath</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">path</span><span class="p">(</span><span class="s">&quot;include&quot;</span><span class="p">));</span>
+<span class="w">    </span><span class="n">exe</span><span class="p">.</span><span class="n">addIncludePath</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">path</span><span class="p">(</span><span class="s">&quot;src/lualib&quot;</span><span class="p">));</span>
+<span class="w">    </span><span class="n">exe</span><span class="p">.</span><span class="n">addLibraryPath</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">path</span><span class="p">(</span><span class="s">&quot;lib&quot;</span><span class="p">));</span>
+</code></pre>
+</div>
+
+                    </div>
+                </div><!-- container fluid -->
+            </div><!-- col-10 -->
+        </div> <!-- Row -->
+    </div><!-- container-fluid -->
+</body>
+</html>
