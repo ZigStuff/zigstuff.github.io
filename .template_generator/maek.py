@@ -3,6 +3,7 @@
 # maek.py by William Welna is marked CC0 1.0. To view a copy of this mark, visit https://creativecommons.org/publicdomain/zero/1.0/ 
 
 import configparser
+import os
 from markdown2 import Markdown
 
 markdown = Markdown()
@@ -37,15 +38,22 @@ class Page:
         with open(f"../{afile[:-3]}.html", 'w') as o: o.write(self.page_main)
 
 def dopage(config, afile):
+    print(f"Processing {afile}")
     p = Page(config, afile)
     p.render()
+
+def render_pages(config):
+    for dirpath, dirnames, filenames in os.walk("pages"):
+        dirpath = dirpath.replace('pages', '') # Trim pages off
+        for file in filenames:
+            if dirpath == "": # Root
+                dopage(config, file)
+            else: # Subdir
+                os.makedirs(f"../{dirpath[1:]}", exist_ok=True) # Works because starts at top dir
+                dopage(config, f"{dirpath[1:]}/{file}")
 
 if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read(['template_variables.ini'])
 
-    dopage(config, 'index.md')
-    dopage(config, 'blog.md')
-    dopage(config, 'snippets.md')
-    dopage(config, 'resources.md')
-    dopage(config, 'about.md')
+    render_pages(config)
